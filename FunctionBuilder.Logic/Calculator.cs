@@ -8,10 +8,12 @@ namespace FunctionBuilder.Logic
     {
         public object[] RPNArr { get; private set; }
         public string[] RPNstr { get; private set; }
+        public int X { get; private set; }
         public double Answer { get; private set; }
-        public Calculator(string expression)
+        public Calculator(string expression, int x)
         {
-            RPNArr = GetRPN(expression);
+            X = x;
+            RPNArr = GetRPN(expression.Replace("x", X.ToString()));
             Answer = CalculateRPN();
         }
         object[] GetRPN(string exp)
