@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace FunctionBuilder.Logic
+﻿
+namespace FunctionBuilder.Console
 {
+    using System;
     class Program
     {
         static void Main(string[] args)

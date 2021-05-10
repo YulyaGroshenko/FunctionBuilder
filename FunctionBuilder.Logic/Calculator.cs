@@ -6,22 +6,23 @@ namespace FunctionBuilder.Logic
 {
     public class Calculator
     {
-        public object[] RPNArr { get; private set; }
-        public string[] RPNstr { get; private set; }
-        public int X { get; private set; }
-        public double Answer { get; private set; }
-        public Calculator(string expression, int x)
+        private object[] RPNobj { get; set; }
+        public string RPNstr { get; private set; }
+        public double X { get; private set; }
+        public double Y { get; private set; }
+        public Calculator(string expression, double x)
         {
             X = x;
-            RPNArr = GetRPN(expression.Replace("x", X.ToString()));
-            Answer = CalculateRPN();
+            RPNobj = GetRPN(expression.Replace("x", X.ToString()));
+            RPNstr = RPNobj.ToString();
+            Y = CalculateRPN();
         }
-        object[] GetRPN(string exp)
+        private object[] GetRPN(string exp)
         {
             List<object> expression = ParseExpression(exp);
             return ParseToRPN(expression);
         }
-        List<object> ParseExpression(string expression)
+        private List<object> ParseExpression(string expression)
         {
             List<object> objExpression = new List<object>();
             for (int i = 0; i < expression.Length; i++)
@@ -50,28 +51,28 @@ namespace FunctionBuilder.Logic
             }
             return objExpression;
         }
-        bool CheckDigit(string param)
+        private bool CheckDigit(string param)
         {
             if (double.TryParse(param, out _))
                 return true;
             else
                 return false;
         }
-        bool CheckBrakets(string param)
+        private bool CheckBrakets(string param)
         {
             if (param == "(" || param == ")")
                 return true;
             else
                 return false;
         }
-        bool CheckStartAndEnd(string param)
+        private bool CheckStartAndEnd(string param)
         {
             if (param == "|")
                 return true;
             else
                 return false;
         }
-        Operations ChooseOperation(object operation)
+        private Operations ChooseOperation(object operation)
         {
             Operations op = null;
             switch (operation.ToString())
@@ -94,7 +95,7 @@ namespace FunctionBuilder.Logic
             }
             return op;
         }
-        object[] ParseToRPN(List<object> expression)
+        private object[] ParseToRPN(List<object> expression)
         {
             Stack<object> outputStr = new Stack<object>();
             Stack<object> stack = new Stack<object>();
@@ -163,19 +164,19 @@ namespace FunctionBuilder.Logic
             }
             return outputStr.ToArray();
         }
-        double CalculateRPN()
+        private double CalculateRPN()
         {
             Stack<double> answer = new Stack<double>();
-            for (int i = RPNArr.Length - 1; i >= 0; i--)
+            for (int i = RPNobj.Length - 1; i >= 0; i--)
             {
-                if (RPNArr[i] is double)
+                if (RPNobj[i] is double)
                 {
-                    answer.Push(Convert.ToDouble(RPNArr[i]));
+                    answer.Push(Convert.ToDouble(RPNobj[i]));
                 }
-                else if (RPNArr[i] is Operations)
+                else if (RPNobj[i] is Operations)
                 {
                     double[] nums = { answer.Pop(), answer.Pop() };
-                    answer.Push((RPNArr[i] as Operations).Calculate(nums));
+                    answer.Push((RPNobj[i] as Operations).Calculate(nums));
                 }
             }
             return answer.Pop();
