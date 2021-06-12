@@ -7,14 +7,12 @@ namespace FunctionBuilder.Logic
     public class Calculator
     {
         private object[] RPNobj { get; set; }
-        public string RPNstr { get; private set; }
         public double X { get; private set; }
         public double Y { get; private set; }
         public Calculator(string expression, double x)
         {
             X = x;
             RPNobj = GetRPN(expression.Replace("x", X.ToString()));
-            RPNstr = RPNobj.ToString();
             Y = CalculateRPN();
         }
         private object[] GetRPN(string exp)
@@ -25,9 +23,10 @@ namespace FunctionBuilder.Logic
         private List<object> ParseExpression(string expression)
         {
             List<object> objExpression = new List<object>();
-            for (int i = 0; i < expression.Length; i++)
+            for (int i = 0; i < expression.Length; i++) 
             {
-                if (CheckDigit(expression[i].ToString()))
+                if (CheckDigit(expression[i].ToString()) || 
+                    "-".Contains(expression[i]) && CheckDigit(expression[i + 1].ToString()))
                 {
                     StringBuilder strBuilder = new StringBuilder().Append(expression[i]);
                     while (CheckDigit(expression[i + 1].ToString()) || expression[i + 1] == ',')
@@ -41,7 +40,7 @@ namespace FunctionBuilder.Logic
                 {
                     objExpression.Add(expression[i]);
                 }
-                else if ("+-*/^".Contains(expression[i].ToString()))
+                else if ("+-*/^".Contains(expression[i])) 
                 {
                     Operations operation = ChooseOperation(expression[i]);
                     objExpression.Add(operation);
@@ -127,11 +126,15 @@ namespace FunctionBuilder.Logic
                                 i++;
                             }
                             else
+                            {
                                 outputStr.Push(stack.Pop());
+                            }
                             break;
                         case (3):
                             if (stack.Peek() is Operations)
+                            {
                                 outputStr.Push(stack.Pop());
+                            }
                             else
                             {
                                 stack.Push(expression[i]);
@@ -149,7 +152,9 @@ namespace FunctionBuilder.Logic
                 else if (expression[i].ToString() == ")")
                 {
                     if (stack.Peek().ToString() != "(")
+                    {
                         outputStr.Push(stack.Pop());
+                    }
                     else
                     {
                         stack.Pop();
@@ -157,9 +162,13 @@ namespace FunctionBuilder.Logic
                     }
                 }
                 else if (CheckStartAndEnd(expression[i].ToString()) && (stack.Count != 0))
+                {
                     outputStr.Push(stack.Pop());
+                }
                 else
+                {
                     break;
+                }
 
             }
             return outputStr.ToArray();

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FunctionBuilder.Logic
 {
-    class InfoWorker
+    public class InfoWorker
     {
         public double[] XRange { get; private set; }
         public List<Calculator> RPNs { get; private set; }
@@ -12,14 +12,19 @@ namespace FunctionBuilder.Logic
         {
             XRange = GetRange(range, double.Parse(step));
             RPNs = GetRPNs($"|{expression}|");
-
         }
         private double[] GetRange(string range, double step)
         {
+            double startRange = double.Parse(range.Split(" ")[0]);
+            double EndRange = double.Parse(range.Split(" ")[2]);
             List<double> xRange = new List<double>();
-            for (double i = double.Parse(range.Split(" ")[0]); i <= double.Parse(range.Split(" ")[2]); i+= step)
+            for (double i = startRange; i <= EndRange; i+= step)
             {
                 xRange.Add(i);
+            }
+            for (int i = 0; i < xRange.Count; i++)
+            {
+                xRange[i] = Math.Round(xRange[i], 1);
             }
             return xRange.ToArray();
         }
