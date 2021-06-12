@@ -1,0 +1,37 @@
+﻿<Window x:Class="FunctionBuilder.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FunctionBuilder.WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        SizeChanged="Window_SizeChanged">
+    <Grid x:Name="Grid" ShowGridLines="true">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Viewbox x:Name="Box1" MaxHeight="40">
+            <StackPanel Orientation="Horizontal">
+                <Label>y =</Label>
+                <TextBox x:Name="Expression" Width="100"></TextBox>
+                <Label>Диапазон</Label>
+                <TextBox x:Name="Range" Width="111"></TextBox>
+                <Label>Шаг</Label>
+                <TextBox x:Name="Step" Width="47"></TextBox>
+            </StackPanel>
+        </Viewbox>
+        <Viewbox x:Name="Button" Grid.Row="1" MaxHeight="40" >
+        <Button Content="Вычислить" Click="Button_Click"></Button>
+        </Viewbox>
+        <Canvas Grid.Row="2" 
+                x:Name="Canvas" 
+                Width="800"
+                Height="354" 
+                Background="White" 
+                MouseMove="Canvas_MouseMove" MouseDown="Canvas_MouseDown"></Canvas>
+    </Grid>
+</Window>
